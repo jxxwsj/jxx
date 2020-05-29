@@ -1,0 +1,16 @@
+ 题目：给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序；
+ 思路：使用双指针；
+
+ php实现代码：
+    function moveZeroes(&$nums) {
+        $i = 0;
+        for($j=0;$j<count($nums);$j++){
+            if($nums[$j] !=0){
+                $temp = $nums[$i];
+                $nums[$i] = $nums[$j];
+                $nums[$j] = $temp;
+                $i++;
+            }
+        }
+        return $nums;
+    }

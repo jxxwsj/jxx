@@ -1,0 +1,54 @@
+    /**
+     * 接雨水
+     * 题目：给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水
+     * @param $height
+     * @return int
+     * @author JXX
+     * @date datetime
+     */
+    思想方式：使用栈
+    php实现代码：
+    function trap($height) {
+        if(count($height)<3){
+            return 0;
+        }
+
+        $aaa = array();
+        $stack = [];//建立一个栈
+        $num = 0;
+        for($i=0; $i<count($height);$i++ ){
+            if( empty($stack)){
+                array_push($stack,$i);
+            }else if( $height[$i]<= $height[$stack[count($stack)-1]]  ){
+                //如果比栈的元素小，就进站
+                array_push($stack,$i);
+            }else{
+
+                while( !empty($stack) && ($height[$stack[count($stack)-1]] < $height[$i] ) ){
+                    //var_dump($stack);
+                    $last_index = array_pop($stack);
+
+                    while(!empty($stack) && ($height[$stack[count($stack)-1]] == $height[$last_index] ) ){
+                        array_pop($stack);
+                    }
+
+                    if(!empty($stack)){
+                        $top_index = $stack[count($stack)-1];
+                        $len = $i - $top_index-1 ;
+                        $w = $len >0?$len :0;
+                        $h_d = min($height[$top_index],$height[$i] ) - $height[$last_index];
+                        $num += $w*$h_d;
+                        $aaa[] = array($w,$h_d);
+
+
+
+                    }
+
+
+                }
+
+                array_push($stack,$i);
+            }
+        }
+        return $num ;
+    }

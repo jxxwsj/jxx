@@ -3,7 +3,7 @@
   节点的右子树只包含大于当前节点的数。
   所有左子树和右子树自身必须也是二叉搜索树。
   
-思路：使用递归
+思路一：使用递归 ，根据二叉树搜索树的特征进行验证
 /**
  * Definition for a binary tree node.
  * class TreeNode {
@@ -35,4 +35,44 @@ class Solution {
         $r = $this->helper($node->right,$node->val,$upper);
         return $l && $r;
     }
+}
+
+思路二：中序遍历
+因为二叉搜索树的中序遍历是升序的，所以如果按照中序遍历，得到的数组是升序的，那么就是二叉搜索树
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     public $val = null;
+ *     public $left = null;
+ *     public $right = null;
+ *     function __construct($value) { $this->val = $value; }
+ * }
+ */
+class Solution {
+
+    /**
+     * 使用中序遍历
+     * @param TreeNode $root
+     * @return Boolean
+     */
+    function isValidBST($root) {
+        if(is_null($root)) return true;
+        $stack = array();//定义一个栈，存储节点
+        $inorder = null; //前一个中序遍历的值
+
+        while( !empty($stack) || !is_null($root) ){
+            while( !is_null($root) ){
+                array_push($stack,$root);
+                $root = $root->left;//找到最后一个左节点
+            }
+
+            $root = array_pop($stack);
+            if( !is_null($inorder) && $root->val <= $inorder) return false;
+            $inorder = $root->val;
+            $root = $root->right; //再遍历右子树
+        }
+        return true;//所有节点遍历完，都有有效则返回true
+    }
+   
+   
 }
